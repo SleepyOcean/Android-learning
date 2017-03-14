@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by sleepy on 17-2-4 下午5:50
+  ~ Copyright (c) 2017.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="125dp"
+    android:background="?android:attr/selectableItemBackground"
+    android:paddingTop="5dp"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    >
+
+    <RelativeLayout
+        android:id="@+id/id_back_ly"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginBottom="10dp"
+        android:background="@drawable/rounded_background"
+        android:elevation="5dp"
+        >
+        <ImageView
+            android:id="@+id/id_img"
+            android:layout_width="100dp"
+            android:layout_height="match_parent"
+            />
+
+        <TextView
+            android:id="@+id/id_tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:paddingRight="30dp"
+            android:paddingTop="15dp"
+            android:text="普通瓷砖"
+            android:textColor="#F3F0E6"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:typeface="monospace"
+            />
+        <!--<Button-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_toLeftOf="@+id/id_tv_name"-->
+            <!--android:text="修改"-->
+            <!--android:src="#00000000"-->
+            <!--android:background="?android:attr/selectableItemBackground"-->
+            <!--android:onClick="onEdit"-->
+            <!--/>-->
+
+        <TextView
+            android:id="@+id/id_tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2017-2-4"
+            android:textSize="14sp"
+            android:textColor="#585057"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:paddingRight="32dp"
+            android:paddingBottom="10dp"
+            />
+
+
+    </RelativeLayout>
+
+</RelativeLayout>

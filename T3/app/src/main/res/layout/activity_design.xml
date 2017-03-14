@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by sleepy on 17-2-4 下午7:46
+  ~ Copyright (c) 2017.
+  -->
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <fragment
+        android:id="@+id/id_fragment_design"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        class="com.sleepy.t3.DesignFragment"
+        />
+</RelativeLayout>

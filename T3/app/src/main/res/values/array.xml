@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by sleepy on 17-2-7 下午2:19
+  ~ Copyright (c) 2017.
+  -->
+<resources>
+    <string-array name="column">
+        <item>3x3</item>
+        <item>4x4</item>
+        <item>5x5</item>
+        <item>6x6</item>
+        <item>9x9</item>
+    </string-array>
+</resources>
