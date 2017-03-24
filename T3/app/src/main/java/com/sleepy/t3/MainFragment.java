@@ -33,7 +33,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
 
     interface OnListItemClickListener{
-        void onItemClick(View v);
+        void onItemClick(View v,int position);
     }
 
     private OnListItemClickListener mOnListItemClickListener;
@@ -80,7 +80,7 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 //        startActivity(new Intent(getActivity(), DesignActivity.class));
 
-        mOnListItemClickListener.onItemClick(view);
+        mOnListItemClickListener.onItemClick(view,position);
 
     }
 }

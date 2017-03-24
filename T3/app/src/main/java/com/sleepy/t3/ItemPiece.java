@@ -11,14 +11,26 @@ public class ItemPiece {
     private int index ;
     private Bitmap bitmap ;
 
-    public ItemPiece()
-    {
+    public float getCurrentTangle() {
+        return currentTangle;
     }
 
-    public ItemPiece(int index, Bitmap bitmap)
+    public void setCurrentTangle(float currentTangle) {
+        this.currentTangle = currentTangle;
+    }
+
+    private float currentTangle;
+
+    public ItemPiece()
+    {
+        currentTangle=0;
+    }
+
+    public ItemPiece(int index, Bitmap bitmap,int currentTangle)
     {
         this.index = index;
         this.bitmap = bitmap;
+        this.currentTangle = currentTangle;
     }
 
     public int getIndex()
@@ -39,6 +51,10 @@ public class ItemPiece {
     public void setBitmap(Bitmap bitmap)
     {
         this.bitmap = bitmap;
+    }
+
+    public void resetTangle(){
+        currentTangle = 0;
     }
 
     @Override

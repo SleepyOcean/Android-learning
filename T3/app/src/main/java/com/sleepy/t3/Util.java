@@ -18,6 +18,17 @@ public class Util {
     final static int CODE_INTENT_DESIGN = 10;
     static int CurrentNum=0;
     public static String imagePath;
+    public static int LOAD_MODE = 0;
+    public static int column = 3;
+    public static float uCurrentTangle[] = new float[100];
+    public static int tangle[] = new int[100];
+    public static boolean isLoad =false;
+
+    public static void resetTangle(){
+        for(int i:tangle){
+            i=0;
+        }
+    }
 
     public static String getCurrentTime() {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日   HH:mm:ss");

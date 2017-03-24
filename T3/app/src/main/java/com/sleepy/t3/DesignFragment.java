@@ -37,6 +37,8 @@ public class DesignFragment extends Fragment {
     CustomLayout mCustomLayout;
     Bitmap mBitmap;
     EditText mEditText;
+    String path;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -46,16 +48,28 @@ public class DesignFragment extends Fragment {
         mEditText = (EditText) view.findViewById(R.id.id_columnNum);
 
 
-        initDesignFragment();
-
+        if(Util.LOAD_MODE==0) {
+            initDesignFragment();
+        }
+        else{
+            loadDesignFragment();
+            Util.LOAD_MODE=0;
+        }
         return view;
+    }
+
+    private void loadDesignFragment() {
+        path = Util.imagePath;
+        mBitmap = BitmapFactory.decodeFile(path);
+        mCustomLayout.setmColumn(Util.column);
+        mCustomLayout.setBitmap(mBitmap);
     }
 
     private void initDesignFragment() {
         Intent intent = getActivity().getIntent();
-        String path = intent.getStringExtra("Image_Path");
-        PreferenceHelper.putString("path"+Util.CurrentNum,path,getContext());
-        Log.d("TAG", "initDesignFragment: ________"+path);
+        path = intent.getStringExtra("Image_Path");
+        Util.imagePath = path;
+//        Log.d("TAG", "initDesignFragment: ________"+path);
         mBitmap = BitmapFactory.decodeFile(path);
         mCustomLayout.setBitmap(mBitmap);
     }

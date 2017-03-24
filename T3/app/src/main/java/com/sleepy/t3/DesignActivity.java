@@ -45,47 +45,65 @@ public class DesignActivity extends AppCompatActivity {
         mCustomLayout = (CustomLayout) findViewById(R.id.id_tile_show);
         mEditText = (EditText) findViewById(R.id.id_columnNum);
 
+        MainActivity.activityMain.finish();
     }
 
+
     public void setColumn(View view) {
-        int num=3;
+        int num = 3;
         if (TextUtils.isEmpty(mEditText.getText())) {
-            Log.e("TAG", "setColumn: ######################################################################" );
+//            Log.e("TAG", "setColumn: ######################################################################" );
         } else {
             if (Util.isNum(mEditText.getText().toString())) {
                 num = Integer.valueOf((mEditText.getText().toString()));
-                if(num<1||num>10){
-                    num=3;
+                if (num < 1 || num > 10) {
                     Toast.makeText(this, "Invalid Num", Toast.LENGTH_SHORT).show();
+                } else {
+                    mCustomLayout.setmColumn(num);
+                    mCustomLayout.invalidate();
                 }
-                Log.d("TAG", "initDesignFragment: =====================================================================" + num);
-            }else {
+//                Log.d("TAG", "initDesignFragment: =====================================================================" + num);
+            } else {
                 Toast.makeText(this, "Wrong input", Toast.LENGTH_SHORT).show();
             }
         }
-            mCustomLayout.setmColumn(num);
-            mCustomLayout.invalidate();
-            Log.d("TAG", "initDesignFragment:++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+//            Log.d("TAG", "initDesignFragment:++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
     }
 
-    public void onSaveData(View view){
-        mEditTextName=new EditText(this);
+    public void onSaveData(View view) {
+        mEditTextName = new EditText(this);
 //        Toast.makeText(this, "saving...", Toast.LENGTH_SHORT).show();
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Title");
         builder.setView(mEditTextName);
-        builder.setNegativeButton("Cancel",null);
+        builder.setNegativeButton("Cancel", null);
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
 //                Toast.makeText(DesignActivity.this, PreferenceHelper.getString("name",getApplicationContext())+Util.CurrentNum, Toast.LENGTH_SHORT).show();
-                PreferenceHelper.putString("name"+Util.CurrentNum,mEditTextName.getText().toString(),getApplicationContext());
-                PreferenceHelper.putString("time"+Util.CurrentNum,Util.getCurrentTime(),getApplicationContext());
+                PreferenceHelper.putString("name" + Util.CurrentNum, mEditTextName.getText().toString(), getApplicationContext());
+                PreferenceHelper.putString("time" + Util.CurrentNum, Util.getCurrentTime(), getApplicationContext());
+//                Log.d("TAG", "onClick: Current Path:%%%%%%%%%%%%%%%%%" + Util.imagePath);
+                PreferenceHelper.putString("path" + Util.CurrentNum, Util.imagePath, getApplicationContext());
+                PreferenceHelper.putInt("column" + Util.CurrentNum, mCustomLayout.getColumn(), getApplicationContext());
+                for(int i=0;i<mCustomLayout.getItemBitmaps().size();i++){
+                    PreferenceHelper.putInt("tangle"+Util.CurrentNum+i,(int)mCustomLayout.getItemBitmaps().get(i).getCurrentTangle(),getApplicationContext());
+//                    Log.d("TAG", "loadTangleRecord: #####################"+(int)mCustomLayout.getItemBitmaps().get(i).getCurrentTangle());
+//                    Log.d("TAG", "loadTangleRecord: ----------------------------------------------------------------------------");
+//                    Log.d("TAG", "loadTangleRecord: #####################"+mCustomLayout.getItemBitmaps().get(i).getCurrentTangle());
+                }
                 Util.CurrentNum++;
-                PreferenceHelper.putInt("currentNum",Util.CurrentNum,getApplicationContext());
+                PreferenceHelper.putInt("currentNum", Util.CurrentNum, getApplicationContext());
             }
         });
         builder.show();
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Util.resetTangle();
+        startActivity(new Intent(this, MainActivity.class));
+    }
 }

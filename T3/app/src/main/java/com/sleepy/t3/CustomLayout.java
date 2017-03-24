@@ -25,6 +25,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -35,7 +36,12 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
     private int mMargin = 3;
     private int mPadding;
 
-    private int num=0;
+    private int num = 0;
+
+
+    public int getColumn() {
+        return mColumn;
+    }
 
     private int mColumn = 4;
 
@@ -46,11 +52,8 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
     }
 
     private void resetParams() {
-        num=0;
-        once=false;
-        for(float i:currentTangle){
-            i=0;
-        }
+        num = 0;
+        once = false;
 
         removeAllViews();
     }
@@ -59,6 +62,11 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
     private int mItemWidth;
     private ImageView[] mItems;
     private boolean once;
+
+    public List<ItemPiece> getItemBitmaps() {
+        return mItemBitmaps;
+    }
+
     private List<ItemPiece> mItemBitmaps;
 
 
@@ -68,7 +76,9 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
 
     private Bitmap mBitmap;
     private Bitmap mNewBitmap;
-    private float currentTangle[] = new float[100];
+
+
+//    private float currentTangle[] = new float[100];
 
     public CustomLayout(Context context) {
         super(context);
@@ -87,16 +97,20 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         mWidth = Math.min(getMeasuredHeight(), getMeasuredWidth());
-        if(num==0) {
+        if (num == 0) {
             if (!once) {
                 initBitmap();
                 initItem();
+                if(Util.isLoad) {
+                    loadTangleRecord(Util.tangle);
+                    loadRecord();
+                }
                 once = true;
-                Log.d("TAG", "onMeasure: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//                Log.d("TAG", "onMeasure: !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
             }
         }
         num++;
-        Log.d("TAG", "onMeasure:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> times="+num);
+//        Log.d("TAG", "onMeasure:>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> times="+num);
         setMeasuredDimension(mWidth, mWidth);
 
     }
@@ -177,7 +191,30 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
 //        initItem();
     }
 
-    private void rotateAnimation(final View v) {
+    public void loadRecord() {
+        for (int i = 0; i < mItemBitmaps.size(); i++) {
+            if ((int) mItemBitmaps.get(i).getCurrentTangle() != 0)
+                rotateAnimation(getChildAt(i),mItemBitmaps.get(i).getCurrentTangle());
+//            rotateImg(i,(int)mItemBitmaps.get(i).getCurrentTangle());
+        }
+    }
+
+    public void resetTangle() {
+        for (int i = 0; i < mItemBitmaps.size(); i++) {
+            mItemBitmaps.get(i).setCurrentTangle(0);
+        }
+    }
+
+    public void loadTangleRecord(int[] tang) {
+        for (int i = 0; i < mItemBitmaps.size(); i++) {
+            mItemBitmaps.get(i).setCurrentTangle((float) tang[i]);
+//            Log.d("TAG", "loadTangleRecord: #####################>>mItemBitmaps.get(i).getCurrentTangle():" + mItemBitmaps.get(i).getCurrentTangle());
+//            Log.d("TAG", "loadTangleRecord: #####################>>tang:" + tang[i]);
+//            Log.d("TAG", "loadTangleRecord: #####################>>Util.tangle:" + Util.tangle[i]);
+        }
+    }
+
+    private void rotateAnimation(final View v,float tangle) {
 
         AnimationSet animationSet = new AnimationSet(true);
 
@@ -185,12 +222,12 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
         scaleAnimSmall.setDuration(300);
         scaleAnimSmall.setFillAfter(true);
 
-        ScaleAnimation scaleAnimBig = new ScaleAnimation(1.0f, 1.0f/(float) Math.sin(Math.PI / 4), 1.0f, 1.0f/(float) Math.sin(Math.PI / 4), Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        ScaleAnimation scaleAnimBig = new ScaleAnimation(1.0f, 1.0f / (float) Math.sin(Math.PI / 4), 1.0f, 1.0f / (float) Math.sin(Math.PI / 4), Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         scaleAnimBig.setDuration(300);
         scaleAnimBig.setStartOffset(600);
         scaleAnimBig.setFillAfter(true);
 
-        RotateAnimation anim = new RotateAnimation(currentTangle[v.getId() - 1], currentTangle[v.getId() - 1] + 90f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        RotateAnimation anim = new RotateAnimation(0,  tangle, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         anim.setDuration(300);
         anim.setStartOffset(300);
         anim.setFillAfter(false);
@@ -202,7 +239,34 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
 
         v.startAnimation(animationSet);
 
-        currentTangle[v.getId() - 1] += 90f;
+    }
+
+    private void rotateAnimation(final View v) {
+
+        AnimationSet animationSet = new AnimationSet(true);
+
+        ScaleAnimation scaleAnimSmall = new ScaleAnimation(1.0f, (float) Math.sin(Math.PI / 4), 1.0f, (float) Math.sin(Math.PI / 4), Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scaleAnimSmall.setDuration(300);
+        scaleAnimSmall.setFillAfter(true);
+
+        ScaleAnimation scaleAnimBig = new ScaleAnimation(1.0f, 1.0f / (float) Math.sin(Math.PI / 4), 1.0f, 1.0f / (float) Math.sin(Math.PI / 4), Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        scaleAnimBig.setDuration(300);
+        scaleAnimBig.setStartOffset(600);
+        scaleAnimBig.setFillAfter(true);
+
+        RotateAnimation anim = new RotateAnimation(mItemBitmaps.get(v.getId() - 1).getCurrentTangle(), mItemBitmaps.get(v.getId() - 1).getCurrentTangle() + 90f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        anim.setDuration(300);
+        anim.setStartOffset(300);
+        anim.setFillAfter(false);
+
+        animationSet.addAnimation(scaleAnimSmall);
+        animationSet.addAnimation(anim);
+        animationSet.addAnimation(scaleAnimBig);
+        animationSet.setFillAfter(true);
+
+        v.startAnimation(animationSet);
+
+        mItemBitmaps.get(v.getId() - 1).setCurrentTangle(mItemBitmaps.get(v.getId() - 1).getCurrentTangle() + 90);
     }
 
     public void rotateImg(int itemId, final int orientationDegree) {
@@ -212,7 +276,7 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
         try {
             mNewBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), m, true);
             mItemBitmaps.get(itemId).setBitmap(mNewBitmap);
-            System.out.println("完成设置" + itemId);
+//            System.out.println("完成设置" + itemId);
         } catch (OutOfMemoryError ex) {
         }
     }
@@ -247,7 +311,4 @@ public class CustomLayout extends RelativeLayout implements View.OnClickListener
         return true;
     }
 
-    public  void  refresh() {
-        initItem();
-    }
 }

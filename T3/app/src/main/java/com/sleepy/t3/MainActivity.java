@@ -29,14 +29,19 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
     static final int IMAGE_CODE = 0; // 这里的IMAGE_CODE是自己任意定义的
     String imagePath;
     MainFragment mMainFragment;
-    MainFragment mainFragment;
     ArcMenu arcMenu;
+    CustomLayout mCustomLayout;
+
+
+    static MainActivity activityMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Util.CurrentNum = PreferenceHelper.getInt("currentNum",getApplicationContext());
+        mCustomLayout = (CustomLayout) findViewById(R.id.id_tile_show);
+        activityMain = this;
+        Util.CurrentNum = PreferenceHelper.getInt("currentNum", getApplicationContext());
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -111,7 +116,8 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
             } finally {
                 Intent designIntent = new Intent(this, DesignActivity.class);
                 designIntent.putExtra("Image_Path", imagePath);
-                startActivity(designIntent);
+                if (imagePath != null)
+                    startActivity(designIntent);
                 return;
             }
         }
@@ -120,9 +126,20 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
     }
 
     @Override
-    public void onItemClick(View v) {
-        startActivity(new Intent(this, DesignActivity.class));
-
+    public void onItemClick(View v, int position) {
+        Intent intent = new Intent(this, DesignActivity.class);
+        intent.putExtra("Index", position);
+        Util.LOAD_MODE = 1;
+//        Log.d("TAG", "onItemClick: /////////////////////////Current:" + Util.CurrentNum);
+        Util.imagePath = PreferenceHelper.getString("path" + (Util.CurrentNum - position - 1), getApplicationContext());
+        Util.column = PreferenceHelper.getInt("column"+(Util.CurrentNum - position - 1),getApplicationContext());
+        for(int i=0;i<Util.column*Util.column;i++){
+            Util.tangle[i]=PreferenceHelper.getInt("tangle"+(Util.CurrentNum - position - 1)+i,getApplicationContext());
+//            Log.d("TAG", "loadTangleRecord: =============================="+Util.tangle[i]);
+        }
+//        Log.d("TAG", "onItemClick: ++++++++++++++++++++++++++path:" + Util.imagePath);
+        Util.isLoad=true;
+        startActivity(intent);
 //        DesignFragment designFragment = new DesignFragment();
 //        Bundle args = new Bundle();
 //        args.putInt("New Fragment",1);
@@ -139,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
     public void onClick(View view, int pos) {
         switch (pos) {
             case 1:
-                Log.e("TAG", "onClick: pos== !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1" + pos);
+//                Log.e("TAG", "onClick: pos== !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1" + pos);
                 break;
             case 2:
                 Intent intent = new Intent(Intent.ACTION_PICK, null);
@@ -147,14 +164,13 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnLi
 //                            startActivityForResult(intent, MainActivity.IMAGE_CODE);
                 startActivityForResult(intent, MainActivity.IMAGE_CODE);
 //                            getContext().startActivity(new Intent(getContext(),DesignActivity.class));
-                System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
                 break;
             case 3:
                 Intent intentCamera = new Intent("android.media.action.IMAGE_CAPTURE");
                 startActivity(intentCamera);
-                System.out.print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
                 break;
         }
+        Util.isLoad=false;
     }
 
 

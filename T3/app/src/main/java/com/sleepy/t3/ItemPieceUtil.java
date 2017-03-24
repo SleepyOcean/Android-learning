@@ -32,6 +32,7 @@ public class ItemPieceUtil {
                 int y = i * pieceWidth;
 
                 itemPiece.setBitmap(bitmap);
+                itemPiece.setCurrentTangle(0);
                 itemPieces.add(itemPiece);
             }
         }
