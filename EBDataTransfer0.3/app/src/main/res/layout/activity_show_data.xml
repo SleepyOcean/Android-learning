@@ -272,14 +272,6 @@
         android:orientation="vertical"
         android:padding="2dp">
 
-        <TextView
-            android:id="@+id/tv_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="20sp"
-            android:text="test"
-            />
 
         <Button
             style="@style/Widget.AppCompat.Button.Colored"

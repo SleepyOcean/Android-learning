@@ -7,7 +7,6 @@ package com.sleepy.ebdatatransfer03;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -21,9 +20,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,11 +30,12 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 
 public class BluetoothActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
-    TextView mTVLocalParam1;
-    TextView mTVLocalParam2;
+    TextView mTVLocalParam;
     ListView mListViewPairedD;
     ListView mListViewAvailableD;
     BluetoothAdapter mBluetoothAdapter;
@@ -46,10 +44,6 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
     Set<BluetoothDevice> pairedDevice;
     ArrayAdapter<String> pairedDLAdapter;
     ArrayAdapter<String> availableDLAdapter;
-
-    RelativeLayout bluetoothLayout;
-    AcceptThread acceptThread;
-
     String tmpString = "";
     String tString = "";
     String hex = "";
@@ -67,113 +61,79 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bluetooth);
         setTitle("设置蓝牙");
-        mTVLocalParam1 = (TextView) findViewById(R.id.param_1);
-        mTVLocalParam2 = (TextView) findViewById(R.id.param_2);
+        mTVLocalParam = (TextView) findViewById(R.id.param_2);
         mListViewPairedD = (ListView) findViewById(R.id.list_paired);
         mListViewAvailableD = (ListView) findViewById(R.id.list_available);
+    }
 
-        bluetoothLayout = (RelativeLayout) getLayoutInflater().inflate(R.layout.activity_bluetooth, null);
+    private Timer mTimer;
+    private TimerTask mTimerTask = new TimerTask() {
+        @Override
+        public void run() {
+            if (clientSock != null) {
+                try {
+                    while (DataUtil.isTaskPause){
+                        try {
+                            Thread.sleep(1000);
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    is = clientSock.getInputStream();
+                    os = clientSock.getOutputStream();
+                    String tmp;
+                    byte[] buff;
+                    buff = new byte[128];
+                    count = is.read(buff);
 
-        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    for (int i = 0; i < count; i++) {
+                        tmp = Integer.toHexString(buff[i] & 0xff);
+                        if (Integer.valueOf(tmp, 16) < 17) {
+                            tmp = "0" + tmp;
+                        }
+                        hex = hex + tmp;
+                    }
 
-        if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "此设备没有蓝牙功能", Toast.LENGTH_SHORT).show();
+                    if (hex.length() == 68) {
+                        DataUtil.data = hex;
+                        DataUtil.parseData();
+                        hex = "";
+                    }
+
+                    Message msg = new Message();
+                    dataHandler.sendMessage(msg);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
         }
-
-        mTVLocalParam1.setText(mBluetoothAdapter.getName());
-        mTVLocalParam2.setText(mBluetoothAdapter.getAddress());
-
-
-        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
-        this.registerReceiver(receiver, filter);
-
-        filter = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
-        this.registerReceiver(receiver, filter);
-
-
-    }
-
-//    private Handler dataHandler = new Handler();
-//    Runnable mDataReceiveRunnable = new Runnable() {
-//        @Override
-//        public void run() {
-//
-//            dataHandler.postDelayed(this,1000);
-//        }
-//    };
-
-    public void startData(View view) {
-        startActivity(new Intent(this, ShowDataActivity.class));
-    }
-
-
-    private Handler handler = new Handler() {
+    };
+    private Handler dataHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
         }
     };
 
-    private class AcceptThread extends Thread {
-        private BluetoothServerSocket serverSocket;
-        private BluetoothSocket socket;
-        private InputStream is;
-        private OutputStream os;
-
-        @Override
-        public void run() {
-            if (clientSock != null) {
-                try {
-//                    socket = clientSock;
-                    is = clientSock.getInputStream();
-                    os = clientSock.getOutputStream();
-                    String tmp;
-                    byte[] buff;
-                    while (true) {
-                        buff = new byte[128];
-                        count = is.read(buff);
-                        for (int i = 0 ; i<count;i++) {
-                            tmp = Integer.toHexString(buff[i] & 0xff);
-                            if(Integer.valueOf(tmp,16)<17) {
-                                tmp = "0"+tmp;
-                            }
-                            hex = hex + tmp;
-
-                        }
-                        Message msg = new Message();
-                        tString = new String(buff, 0, count, "utf-8");
-                        tmpString = tmpString + tString;
-                        msg.obj = tmpString;
-                        if (tmpString.length() == 34) {
-                            DataUtil.data = hex;
-                            DataUtil.parseData();
-                            hex="";
-                            tmpString = "";
-                        }
-                        handler.sendMessage(msg);
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-
-            }
-        }
+    public void startData(View view) {
+        startActivity(new Intent(this, ShowDataActivity.class));
     }
-
-    public void scanDevice(View v) {
-        if (mBluetoothAdapter.isEnabled()) {
-            setTitle("正在扫描设备...");
-            if (mBluetoothAdapter.isDiscovering()) {
-                mBluetoothAdapter.cancelDiscovery();
-            }
-            mBluetoothAdapter.startDiscovery();
-            availableDList = new ArrayList<>();
-        }
-    }
-
 
     public void startBluetooth(View view) {
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "此设备没有蓝牙功能", Toast.LENGTH_SHORT).show();
+        }
+
+        mTVLocalParam.setText(mBluetoothAdapter.getName());
+
+        IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
+        registerReceiver(receiver, filter);
+
+        IntentFilter filter2 = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+        registerReceiver(receiver, filter2);
+
 
         if (mBluetoothAdapter.isEnabled()) {
             Toast.makeText(this, "蓝牙已打开", Toast.LENGTH_SHORT).show();
@@ -184,15 +144,11 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             else
                 Toast.makeText(this, "重启蓝牙失败", Toast.LENGTH_SHORT).show();
         }
-
-
         try {
-
             Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
         pairedDList = new ArrayList<>();
         //获取已配对的设备信息，并在mListViewPairedD中显示
         pairedDevice = mBluetoothAdapter.getBondedDevices();
@@ -207,7 +163,14 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         mListViewPairedD.setAdapter(pairedDLAdapter);
         mListViewPairedD.setOnItemClickListener(this);
 
-
+        if (mBluetoothAdapter.isEnabled()) {
+            setTitle("正在扫描设备...");
+            if (mBluetoothAdapter.isDiscovering()) {
+                mBluetoothAdapter.cancelDiscovery();
+            }
+            mBluetoothAdapter.startDiscovery();
+            availableDList = new ArrayList<>();
+        }
     }
 
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -218,7 +181,6 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (device.getBondState() != BluetoothDevice.BOND_BONDED) {
                     availableDList.add((device.getName() + " : " + device.getAddress()));
-                    Log.d("TAG", "onReceive: ----------------------------------------------------");
                 }
             } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
                 setTitle("完成设置");
@@ -241,15 +203,18 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
         availableDList.add("未开始搜索");
         availableDLAdapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1, availableDList);
         mListViewAvailableD.setAdapter(availableDLAdapter);
+        DataUtil.resetData();
         mBluetoothAdapter.disable();
+        DataUtil.isTaskPause = true;
     }
 
 
     @Override
     protected void onDestroy() {
         mBluetoothAdapter.disable();
-//        dataHandler.removeCallbacks(mDataReceiveRunnable);
+        mTimer.cancel();
         super.onDestroy();
+        unregisterReceiver(receiver);
     }
 
     @Override
@@ -267,25 +232,26 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
             try {
                 clientSock = device.createRfcommSocketToServiceRecord(MY_UUID);
                 clientSock.connect();
-
-                os = clientSock.getOutputStream();
-                is = clientSock.getInputStream();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        if (os != null) {
-            Toast.makeText(this, "连接成功", Toast.LENGTH_SHORT).show();
-//            try {
-//                os.write("START send message...".getBytes("utf-8"));
-//
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
+        if (clientSock != null) {
+            if(!DataUtil.isTaskPause) {
+                Toast.makeText(this, "连接成功", Toast.LENGTH_SHORT).show();
+            }else {
+                Toast.makeText(this, "未能配对设备，请重启应用", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "连接失败，请重启应用", Toast.LENGTH_SHORT).show();
         }
 
-//        dataHandler.postDelayed(mDataReceiveRunnable,1000);
-        acceptThread = new AcceptThread();
-        acceptThread.start();
+        if (!DataUtil.isTaskOn) {
+            mTimer = new Timer();
+            mTimer.schedule(mTimerTask, 0, 1000);
+            DataUtil.isTaskOn = true;
+        }else {
+            DataUtil.isTaskPause = false;
+        }
     }
 }

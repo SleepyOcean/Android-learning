@@ -8,6 +8,7 @@
     <string name="local_title">本机设备信息</string>
     <string name="local_name">设备名:</string>
     <string name="local_mac_id">Mac地址:</string>
+    <string name="local_bluetooth_status">状态：</string>
     <string name="open_bluetooth">打开</string>
     <string name="close_bluetooth">关闭</string>
     <string name="scan">搜索</string>
