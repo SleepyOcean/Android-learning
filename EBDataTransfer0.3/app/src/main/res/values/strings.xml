@@ -1,0 +1,18 @@
+<!--
+  ~ Created by sleepy on 17-4-28 下午8:03
+  ~ Copyright (c) 2017.
+  -->
+
+<resources>
+    <string name="app_name">光伏板积灰检测数据</string>
+    <string name="local_title">本机设备信息</string>
+    <string name="local_name">设备名:</string>
+    <string name="local_mac_id">Mac地址:</string>
+    <string name="open_bluetooth">打开</string>
+    <string name="close_bluetooth">关闭</string>
+    <string name="scan">搜索</string>
+    <string name="showData">显示数据</string>
+    <string name="device_list">设备列表</string>
+    <string name="paired_device">已配对设备</string>
+    <string name="available_device">可配对设备</string>
+</resources>
