@@ -1,0 +1,78 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.sleepy.tiledesign.EditorFragment">
+
+    <android.support.v7.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="90dp"
+        android:background="@color/themeTabBGColor"
+        android:paddingTop="30dp"
+        app:title="@string/fragment_title_2"
+        app:titleTextColor="@color/themeTabTextColor">
+
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <ImageView
+            android:id="@+id/id_edit_bg_img"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:scaleType="centerCrop"
+            android:src="@drawable/bg" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/id_edit_bt_album"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/id_edit_bt_camera"
+                android:layout_alignStart="@+id/id_edit_bt_camera"
+                android:layout_marginBottom="40dp"
+                android:padding="20dp"
+                android:text="@string/edit_way_1"
+                android:textColor="@color/themeTabTextColor"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/id_edit_bt_camera"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:padding="20dp"
+                android:text="@string/edit_way_2"
+                android:textColor="@color/themeTabTextColor"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/id_edit_bt_cloud"
+                style="@style/Widget.AppCompat.Button.Borderless"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:padding="20dp"
+                android:text="@string/edit_way_3"
+                android:textColor="@color/themeTabTextColor"
+                android:textSize="24sp"
+                android:layout_below="@+id/id_edit_bt_camera"
+                android:layout_centerHorizontal="true" />
+
+        </RelativeLayout>
+
+    </FrameLayout>
+
+
+</LinearLayout>

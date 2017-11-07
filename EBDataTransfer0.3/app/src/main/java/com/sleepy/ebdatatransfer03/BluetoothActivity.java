@@ -94,7 +94,7 @@ public class BluetoothActivity extends AppCompatActivity implements AdapterView.
                         hex = hex + tmp;
                     }
 
-                    if (hex.length() == 68) {
+                    if (hex.length() == 64) {
                         DataUtil.data = hex;
                         DataUtil.parseData();
                         hex = "";

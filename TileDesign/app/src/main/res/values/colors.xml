@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorDivider">#DDF0ED</color>
+    <color name="colorSettingFont">#00755E</color>
+    <color name="colorListItemBG">#FDFCF9</color>
+
+    <color name="themeMain">#C3BED4</color>
+    <color name="themeTabTextColor">#FAFBFB</color>
+    <color name="themeTabTextSelectedColor">#4B2C54</color>
+    <color name="themeTabIndicatorSelectedColor">#9C9EA1</color>
+    <color name="themeTabBGColor">#6E4974</color>
+    <!--<color name="themeTabBGColor">#005687</color>-->
+    <color name="themeListTextColor">#FAFBFB</color>
+    <color name="themeListBGColor">#9966CC</color>
+</resources>

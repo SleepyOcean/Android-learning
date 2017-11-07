@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="colorTheme">#9966CC</color>
+    <color name="colorListItemBG">#FDFCF9</color>
+    <color name="colorAccount1">#00034f</color>
+    <color name="colorAccount2">#005359</color>
+    <color name="colorAccount3">#4C556E</color>
+    <color name="colorAccount4">#44615e</color>
+    <color name="colorDivider">#DDF0ED</color>
+    <color name="colorSettingFont">#00755E</color>
+    <color name="colorCounterPadFontTitle">#495A80</color>
+    <color name="colorCounterPadFontParam">#9966CC</color>
+    <color name="colorCounterPadFontValue">#C3BED4</color>
+    <color name="colorCounterPadFontTimer">#DEA681</color>
+
+
+    <color name="wallpaperColorTheme">#821A7D</color>
+
+
+
+</resources>

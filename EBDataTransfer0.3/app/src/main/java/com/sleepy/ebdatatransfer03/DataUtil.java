@@ -17,10 +17,10 @@ public class DataUtil {
     static String status;
     static String temperature;
     static String humidity;
-    static String uV ;
-    static String power ;
+    static String uV;
+    static String power;
     static String volt;
-    static String electricity ;
+    static String electricity;
     static String dirt;
     private static String tmpString;
     static boolean isTaskOn = false;
@@ -53,7 +53,14 @@ public class DataUtil {
                 temperature = String.valueOf(buff[++i]) + " ℃";
                 humidity = String.valueOf(buff[++i]) + " %";
             } else if (buff[i] == Integer.valueOf("d2", 16)) {
-                uV = String.valueOf(buff[++i] + (buff[++i] / 100));
+                switch (buff[++i] ) {
+                    case 1:
+                        uV = "强";break;
+                    case 2:
+                        uV = "中";break;
+                    case 3:
+                        uV = "弱";break;
+                }
             } else if (buff[i] == Integer.valueOf("d3", 16)) {
                 volt = String.valueOf(buff[++i] + ((float) buff[++i] / 100)) + " V";
             } else if (buff[i] == Integer.valueOf("d4", 16)) {
@@ -61,7 +68,7 @@ public class DataUtil {
             } else if (buff[i] == Integer.valueOf("d5", 16)) {
                 power = String.valueOf(buff[++i]) + " W";
             } else if (buff[i] == Integer.valueOf("d6", 16)) {
-                dirt = "积尘率 "+String.valueOf(buff[++i]) + " %";
+                dirt = "积尘率 " + String.valueOf(buff[++i]) + " %";
             } else if (buff[i] == Integer.valueOf("d7", 16)) {
                 switch (buff[++i]) {
                     case 1:

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">瓷砖铺设</string>
+    <string name="fragment_title_1">首页</string>
+    <string name="fragment_title_2">编辑</string>
+    <string name="fragment_title_3">关于</string>
+    <string name="edit_way_1">相册</string>
+    <string name="edit_way_2">相机</string>
+    <string name="edit_way_3">云上</string>
+    <string name="setting_title_aboutme">关于我们</string>
+    <string name="setting_title_advance">高级功能</string>
+    <string name="setting_title_donate">捐赠 / 评分</string>
+    <string name="setting_title_theme">主题</string>
+    <string name="bt_save">保存</string>
+    <string name="editor_panel_col">列</string>
+    <string name="editor_panel_offset">偏移</string>
+    <string name="editor_panel_row">行</string>
+    <string name="edit_text_hint_col">请输入列数……</string>
+    <string name="edit_text_hint_row">请输入行数……</string>
+    <string name="editor_reset">重置</string>
+    <string name="set_title">取个名字吧</string>
+</resources>

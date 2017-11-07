@@ -1,0 +1,19 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/themeTabBGColor</item>
+        <item name="colorPrimaryDark">@color/themeTabBGColor</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="CollapsingToolbarLayoutTitleTheme" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">@color/themeTabTextColor</item>
+    </style>
+    
+    <style name="PhotoPickerTheme" parent="Matisse.Zhihu">
+        <item name="colorPrimary">@color/themeTabBGColor</item>
+        <item name="colorPrimaryDark">@color/themeTabBGColor</item>
+    </style>
+</resources>

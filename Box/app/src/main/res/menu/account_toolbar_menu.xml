@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/id_toolbar_menu_account_generate_pw"
+        android:title="密码生成"
+        app:showAsAction="collapseActionView" />
+
+    <item
+        android:id="@+id/id_toolbar_menu_account_setting"
+        android:title="设置"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/id_toolbar_menu_account_about"
+        android:title="关于"
+        app:showAsAction="withText" />
+
+    <item
+        android:id="@+id/id_toolbar_menu_account_search"
+        android:icon="@drawable/ic_search_white_18dp"
+        android:title="搜索"
+        app:showAsAction="always" />
+
+</menu>
